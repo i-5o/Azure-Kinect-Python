@@ -1,0 +1,5 @@
+# visual studios files
+.vs/
+
+# CMake build
+out/
