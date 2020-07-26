@@ -24,7 +24,10 @@ add_library(
 	PyKinect SHARED
 	"src/module.c"
 	"src/device.c"
+	"src/capture.c"
+
 	"include/PyKinect/device.h"
+	"include/PyKinect/capture.h"
 )
 
 # linking k4a
@@ -47,3 +50,4 @@ string(REPLACE "/k4a.lib" "" K4A_LIB ${K4A_LIB})
 target_link_libraries(PyKinect PUBLIC "${PY_ENV_PATH}/libs/python38.lib")
 
 configure_file("setup.py" "setup.py")
+configure_file("PyKinect.py" "PyKinect.py")

@@ -30,13 +30,27 @@ void      DeviceObjectDealloc(PyObject* self);
  */
 
 PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args);
+PyObject* DeviceObjectStartCameras(PyObject* self, PyObject* args);
+PyObject* DeviceObjectStopCameras(PyObject* self, PyObject* args);
 
 static PyMethodDef DeviceObjectMethods[] = {
     {
         "get_capture",
         DeviceObjectGetCapture,
         METH_VARARGS,
-        "Idk yet"
+        NULL
+    },
+    {
+        "start_cameras",
+        DeviceObjectStartCameras,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "stop_cameras",
+        DeviceObjectStopCameras,
+        METH_VARARGS,
+        NULL
     },
     {       // end of method list
         NULL,
@@ -54,7 +68,7 @@ static PyMethodDef DeviceObjectMethods[] = {
 
 static PyTypeObject DeviceObjectType = {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "PyKinect.device",
+    .tp_name = "PyKinect.Device",
     .tp_basicsize = sizeof(DeviceObject),
     .tp_itemsize = 0,
     .tp_doc = "Python interface for k4a devices",

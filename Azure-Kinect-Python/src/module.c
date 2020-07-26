@@ -2,6 +2,7 @@
 
 #include <Python.h>
 #include <PyKinect/device.h>
+#include <PyKinect/capture.h>
 
 /*
  *
@@ -22,15 +23,25 @@ PyMODINIT_FUNC PyInit_PyKinect(void)
 	PyObject* pModule;
 	if (PyType_Ready(&DeviceObjectType) < 0)
 		return NULL;
+	if (PyType_Ready(&CaptureObjectType) < 0)
+		return NULL;
 
 	pModule = PyModule_Create(&PyKinectModule);
 	if (!pModule)
 		return NULL;
 
 	Py_INCREF(&DeviceObjectType);
-	if (PyModule_AddObject(pModule, "device", (PyObject*)&DeviceObjectType) < 0)
+	if (PyModule_AddObject(pModule, "Device", (PyObject*)&DeviceObjectType) < 0)
 	{
 		Py_DECREF(&DeviceObjectType);
+		Py_DECREF(&pModule);
+		return NULL;
+	}
+
+	Py_INCREF(&CaptureObjectType);
+	if (PyModule_AddObject(pModule, "Capture", (PyObject*)&CaptureObjectType) < 0)
+	{
+		Py_DECREF(&CaptureObjectType);
 		Py_DECREF(&pModule);
 		return NULL;
 	}
