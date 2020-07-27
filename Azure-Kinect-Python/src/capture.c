@@ -1,4 +1,5 @@
 #include <PyKinect/capture.h>
+#include <PyKinect/image.h>
 
 
 
@@ -21,7 +22,7 @@ PyObject* CaptureObjectNew(PyTypeObject* type, PyObject* args, PyObject* kwds)
 	self = (CaptureObject*)type->tp_alloc(type, 0);
 	if (!self)
 	{
-		PyErr_SetString(PyExc_MemoryError, "Unable to retrieve enough memory for PyKinect.capture");
+		PyErr_SetString(PyExc_MemoryError, "Unable to retrieve enough memory for PyKinect.Capture");
 		return NULL;
 	}
 	return (PyObject*)self;
@@ -50,5 +51,14 @@ void CaptureObjectDealloc(PyObject* self)
 
 PyObject* CaptureObjectGetColorImage(PyObject* self, PyObject* args)
 {
-	Py_RETURN_NOTIMPLEMENTED;
+	PyObject* pImage = PyObject_New(ImageObject, &ImageObjectType);
+	if (!pImage)
+	{
+		PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for Image object");
+		return NULL;
+	}
+	Py_DECREF(PyObject_Dir(pImage));
+
+	((ImageObject*)pImage)->image = k4a_capture_get_color_image(((CaptureObject*)self)->capture);
+	return pImage;
 }

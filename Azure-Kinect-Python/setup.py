@@ -8,7 +8,8 @@ _PyKinect = Extension(
     sources=[
         "${CMAKE_CURRENT_SOURCE_DIR}/src/module.c",
         "${CMAKE_CURRENT_SOURCE_DIR}/src/device.c",
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/capture.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/capture.c",
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/image.c"
     ],
     include_dirs=[
         "${CMAKE_CURRENT_SOURCE_DIR}/include/",

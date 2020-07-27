@@ -22,7 +22,7 @@ PyObject* DeviceObjectNew(PyTypeObject* type, PyObject* args, PyObject* kwds)
 	self = (DeviceObject*)type->tp_alloc(type, 0);
 	if (!self)
 	{
-		PyErr_SetString(PyExc_MemoryError, "Unable to retrieve enough memory for PyKinect.device");
+		PyErr_SetString(PyExc_MemoryError, "Unable to retrieve enough memory for PyKinect.Device");
 		return NULL;
 	}
 	return (PyObject*)self;
@@ -104,7 +104,7 @@ PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args)
 		PyErr_SetString(PyExc_MemoryError, "Unable to create a capture object");
 		return NULL;
 	}
-	Py_IncRef(pCap);
+	Py_DECREF(PyObject_Dir(pCap));
 
 	switch (k4a_device_get_capture(
 		((DeviceObject*)self)->device,

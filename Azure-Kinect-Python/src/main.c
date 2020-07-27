@@ -4,6 +4,20 @@
 
 
 
+void printSerial(k4a_device_t device)
+{
+    // Get the size of the serial number
+    size_t serial_size = 0;
+    k4a_device_get_serialnum(device, NULL, &serial_size);
+
+    // Allocate memory for the serial, then acquire it
+    char* serial = (char*)malloc(serial_size);
+    k4a_device_get_serialnum(device, serial, &serial_size);
+    printf("Opened device: %s\n", serial);
+    free(serial);
+}
+
+
 int main()
 {
     k4a_device_t device = NULL;
@@ -25,7 +39,6 @@ int main()
     config.camera_fps = K4A_FRAMES_PER_SECOND_30;
     config.color_format = K4A_IMAGE_FORMAT_COLOR_MJPG;
     config.color_resolution = K4A_COLOR_RESOLUTION_2160P;
-    //config.depth_mode = K4A_DEPTH_MODE_NFOV_UNBINNED;
 
     if (K4A_RESULT_SUCCEEDED != k4a_device_start_cameras(device, &config))
     {
