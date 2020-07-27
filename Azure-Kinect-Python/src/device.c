@@ -79,6 +79,11 @@ PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args)
 	case 1:
 	{
 		PyObject* pTimeout = PyTuple_GetItem(args, 0);
+		if (!pTimeout)
+		{
+			PyErr_SetString(PyExc_RuntimeError, "Invalid timeout argument");
+			return NULL;
+		}
 		if (!PyLong_Check(pTimeout))
 		{
 			PyErr_SetString(PyExc_TypeError, "A timeout for get_capture must be specified as an integer");
@@ -93,7 +98,12 @@ PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args)
 		return NULL;
 	}
 
-	PyObject* pCap = CaptureObjectNew(&CaptureObjectType, NULL, NULL);
+	PyObject* pCap = PyObject_New(CaptureObject, &CaptureObjectType);
+	if (!pCap)
+	{
+		PyErr_SetString(PyExc_MemoryError, "Unable to create a capture object");
+		return NULL;
+	}
 	Py_IncRef(pCap);
 
 	switch (k4a_device_get_capture(

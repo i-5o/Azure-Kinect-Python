@@ -54,7 +54,7 @@ static PyMethodDef CaptureObjectMethods[] = {
 
 static PyTypeObject CaptureObjectType = {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "PyKinect.Capture",
+    .tp_name = "_PyKinect.Capture",
     .tp_basicsize = sizeof(CaptureObject),
     .tp_itemsize = 0,
     .tp_doc = "Python interface for k4a captures",

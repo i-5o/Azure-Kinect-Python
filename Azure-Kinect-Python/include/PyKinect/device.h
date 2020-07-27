@@ -68,7 +68,7 @@ static PyMethodDef DeviceObjectMethods[] = {
 
 static PyTypeObject DeviceObjectType = {
     PyObject_HEAD_INIT(NULL)
-    .tp_name = "PyKinect.Device",
+    .tp_name = "_PyKinect.Device",
     .tp_basicsize = sizeof(DeviceObject),
     .tp_itemsize = 0,
     .tp_doc = "Python interface for k4a devices",

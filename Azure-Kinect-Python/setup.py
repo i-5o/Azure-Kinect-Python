@@ -3,8 +3,8 @@ from distutils.core import setup, Extension
 from distutils.sysconfig import get_python_inc, get_python_lib
 
 
-PyKinect = Extension(
-    name="PyKinect",
+_PyKinect = Extension(
+    name="_PyKinect",
     sources=[
         "${CMAKE_CURRENT_SOURCE_DIR}/src/module.c",
         "${CMAKE_CURRENT_SOURCE_DIR}/src/device.c",
@@ -21,7 +21,7 @@ PyKinect = Extension(
     ],
     libraries=[
         "python38",
-        "PyKinect",
+        "_PyKinect",
         "k4a"
     ],
     language="c"
@@ -36,9 +36,9 @@ setup(
     description="Provides a C extension for Azure Kinect DK",
     author="Dario Morle",
     author_email="dario@ifiveo.com",
-    ext_modules=[PyKinect],
+    ext_modules=[_PyKinect],
     install_requires=["numpy"],
-    packages=[""],
-    package_dir={"": "."},
+    packages=["PyKinect"],
+    package_dir={"PyKinect": "./PyKinect"},
     data_files = [(get_python_lib(), shared_libs)]
 )

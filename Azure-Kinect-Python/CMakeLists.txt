@@ -21,33 +21,41 @@ link_directories("${PY_ENV_PATH}")
 link_directories("${PY_ENV_PATH}/libs/")
 
 add_library(
-	PyKinect SHARED
+	_PyKinect SHARED
 	"src/module.c"
 	"src/device.c"
 	"src/capture.c"
 
 	"include/PyKinect/device.h"
 	"include/PyKinect/capture.h"
-)
+ )
 
 # linking k4a
 #find_package(k4a CONFIG REQUIRED)
-#target_link_libraries(PyKinect PRIVATE k4a::k4a)
+#target_link_libraries(_PyKinect PRIVATE k4a::k4a)
 
 find_package(k4arecord CONFIG REQUIRED)
-target_link_libraries(PyKinect PRIVATE k4a::k4arecord)
+target_link_libraries(_PyKinect PRIVATE k4a::k4arecord)
 
 find_path(K4A_PATH k4a/k4a.h REQUIRED)
 string(REPLACE "\\" "/" K4A_PATH ${K4A_PATH})
-target_link_directories(PyKinect PUBLIC ${K4A_PATH})
+target_link_directories(_PyKinect PUBLIC ${K4A_PATH})
 
 find_library(K4A_LIB k4a REQUIRED)
 string(REPLACE "\\" "/" K4A_LIB ${K4A_LIB})
-target_link_libraries(PyKinect PRIVATE ${K4A_LIB})
+target_link_libraries(_PyKinect PRIVATE ${K4A_LIB})
 
 string(REPLACE "/k4a.lib" "" K4A_LIB ${K4A_LIB})
 
-target_link_libraries(PyKinect PUBLIC "${PY_ENV_PATH}/libs/python38.lib")
+target_link_libraries(_PyKinect PUBLIC "${PY_ENV_PATH}/libs/python38.lib")
 
 configure_file("setup.py" "setup.py")
-configure_file("PyKinect.py" "PyKinect.py")
+file(COPY "PyKinect" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
+add_executable(
+	kinectTest
+	"src/main.c"
+)
+
+find_package(k4a CONFIG REQUIRED)
+target_link_libraries(kinectTest PRIVATE k4a::k4a)

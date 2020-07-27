@@ -13,12 +13,12 @@
 static struct PyModuleDef PyKinectModule =
 {
 	PyModuleDef_HEAD_INIT,
-	"PyKinect",             // Module name
+	"_PyKinect",            // Module name
 	NULL,                   // Module documentation - provided in python wrapper
 	-1,                     // Module keeps state in global variables
 };
 
-PyMODINIT_FUNC PyInit_PyKinect(void)
+PyMODINIT_FUNC PyInit__PyKinect(void)
 {
 	PyObject* pModule;
 	if (PyType_Ready(&DeviceObjectType) < 0)
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 		exit(1);
 	}
 
-	if (PyImport_AppendInittab("PyKinect", PyInit_PyKinect) == -1)
+	if (PyImport_AppendInittab("_PyKinect", PyInit__PyKinect) == -1)
 	{
 		fprintf(stderr, "Error:  could not extend in-built modules table\n");
 		exit(1);
@@ -67,11 +67,11 @@ int main(int argc, char* argv[])
 	Py_SetProgramName(program);
 	Py_Initialize();
 
-	PyObject* pModule = PyImport_ImportModule("PyKinect");
+	PyObject* pModule = PyImport_ImportModule("_PyKinect");
 	if (!pModule)
 	{
 		PyErr_Print();
-		fprintf(stderr, "Error: could not import module 'PyKinect'\n");
+		fprintf(stderr, "Error: could not import module '_PyKinect'\n");
 	}
 
 	PyMem_RawFree(program);
