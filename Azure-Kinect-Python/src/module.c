@@ -4,6 +4,7 @@
 #include <PyKinect/device.h>
 #include <PyKinect/capture.h>
 #include <PyKinect/image.h>
+#include <PyKinect/device_config.h>
 
 /*
  *
@@ -45,7 +46,14 @@ PyMODINIT_FUNC PyInit__PyKinect(void)
 	if (PyModule_AddObject(pModule, "Image", (PyObject*)&ImageObjectType) < 0)
 		goto ImageObjectError;
 
+	Py_INCREF(&DeviceConfigObjectType);
+	if (PyModule_AddObject(pModule, "DeviceConfig", (PyObject*)&DeviceConfigObjectType) < 0)
+		goto DeviceConfigObjectTypeError;
+
 	return pModule;
+
+DeviceConfigObjectTypeError:
+	Py_DECREF(&DeviceConfigObjectType);
 
 ImageObjectError:
 	Py_DECREF(&ImageObjectType);

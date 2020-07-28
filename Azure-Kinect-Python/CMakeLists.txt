@@ -26,16 +26,15 @@ add_library(
 	"src/device.c"
 	"src/capture.c"
 	"src/image.c"
+	"src/device_config.c"
 
 	"include/PyKinect/device.h"
 	"include/PyKinect/capture.h"
 	"include/PyKinect/image.h"
+	"include/PyKinect/device_config.h"
 )
 
 # linking k4a
-#find_package(k4a CONFIG REQUIRED)
-#target_link_libraries(_PyKinect PRIVATE k4a::k4a)
-
 find_package(k4arecord CONFIG REQUIRED)
 target_link_libraries(_PyKinect PRIVATE k4a::k4arecord)
 
@@ -57,7 +56,7 @@ file(COPY "PyKinect" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 add_executable(
 	kinectTest
 	"src/main.c"
- "include/PyKinect/image.h" "src/image.c")
+)
 
 find_package(k4a CONFIG REQUIRED)
 target_link_libraries(kinectTest PRIVATE k4a::k4a)

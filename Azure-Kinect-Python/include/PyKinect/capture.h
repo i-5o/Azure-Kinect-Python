@@ -36,7 +36,7 @@ static PyMethodDef CaptureObjectMethods[] = {
         "get_color_image",
         CaptureObjectGetColorImage,
         METH_VARARGS,
-        ""
+        NULL
     },
     {       // end of method list
         NULL,

@@ -38,19 +38,19 @@ static PyMethodDef ImageObjectMethods[] = {
         "get_height_pixels",
         ImageObjectGetHeightPixels,
         METH_VARARGS,
-        ""
+        NULL
     },
     {
         "get_width_pixels",
         ImageObjectGetWidthPixels,
         METH_VARARGS,
-        ""
+        NULL
     },
     {
         "to_numpy",
         ImageObjectToNumpy,
         METH_VARARGS,
-        ""
+        NULL
     },
     {       // end of method list
         NULL,

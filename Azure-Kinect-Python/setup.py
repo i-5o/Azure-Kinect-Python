@@ -2,15 +2,12 @@ import os
 from distutils.core import setup, Extension
 from distutils.sysconfig import get_python_inc, get_python_lib
 
+source_files = os.listdir("${CMAKE_CURRENT_SOURCE_DIR}/src/")
+source_files = ["${CMAKE_CURRENT_SOURCE_DIR}/src/" + e for e in shared_libs if e.split(".")[-1] == "c"]
 
 _PyKinect = Extension(
     name="_PyKinect",
-    sources=[
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/module.c",
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/device.c",
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/capture.c",
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/image.c"
-    ],
+    sources=source_files,
     include_dirs=[
         "${CMAKE_CURRENT_SOURCE_DIR}/include/",
         "${PY_ENV_PATH}/include/",

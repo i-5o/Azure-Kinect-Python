@@ -38,19 +38,19 @@ static PyMethodDef DeviceObjectMethods[] = {
         "get_capture",
         DeviceObjectGetCapture,
         METH_VARARGS,
-        ""
+        NULL
     },
     {
         "start_cameras",
         DeviceObjectStartCameras,
         METH_VARARGS,
-        ""
+        NULL
     },
     {
         "stop_cameras",
         DeviceObjectStopCameras,
         METH_VARARGS,
-        ""
+        NULL
     },
     {       // end of method list
         NULL,
