@@ -1,13 +1,10 @@
 #include <PyKinect/device.h>
 #include <PyKinect/capture.h>
+#include <PyKinect/device_config.h>
+#include <PyKinect/util.h>
 
-
-
-/*
- *
- * Helper Functions
- *
- */
+#define pSelf       ((DeviceObject*)self)
+#define m_device    pSelf->device
 
 /*
  *
@@ -136,151 +133,42 @@ PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args)
 
 PyObject* DeviceObjectStartCameras(PyObject* self, PyObject* args)
 {
-	Py_ssize_t argNum = PyTuple_Size(args);
-	if (argNum != 9)
+	CHECK_ARGNUM(args, 1);
+
+	PyObject* pPyKinectMod = PyImport_ImportModule("_PyKinect");
+	if (!pPyKinectMod)
+		return NULL;
+
+	PyObject* pPyDeviceConfig = PyObject_GetAttrString(pPyKinectMod, "ImageCls");
+	Py_DECREF(pPyKinectMod);
+	if (!pPyDeviceConfig)
+		return NULL;
+
+	PyObject* pArg = PyTuple_GetItem(args, 0);
+
+	int ret = PyObject_IsInstance(pArg, pPyDeviceConfig);
+	Py_DECREF(pPyDeviceConfig);
+	if (ret == -1)
+		return NULL;
+	if (!ret)
 	{
-		char buf[64];
-		sprintf(buf, "Expected 9 arguments, recieved %u", (uint32_t)argNum);
-		PyErr_SetString(PyExc_ValueError, buf);
+		PyErr_SetString(PyExc_TypeError, "Argument 0 was not of type DeviceConfig");
 		return NULL;
 	}
 
-	// color_format
-	PyObject* pColorFmt = PyTuple_GetItem(args, 0);
-	if (!pColorFmt)
+	if (!K4A_SUCCEEDED(k4a_device_start_cameras(m_device, &((DeviceConfigObject*)pArg)->config)))
 	{
-		PyErr_SetString(PyExc_RuntimeError, "color_format arg was invalid");
+		PyErr_SetString(PyExc_SystemError, "k4a_device_start_cameras() returned K4A_RESULT_FAILED - Unable to start camera");
 		return NULL;
 	}
-	if (!PyLong_Check(pColorFmt))
-	{
-		PyErr_SetString(PyExc_TypeError, "color_format arg must have type int");
-		return NULL;
-	}
-	k4a_image_format_t colorFmt = (k4a_image_format_t)PyLong_AsLong(pColorFmt);
 
-	// color_resolution
-	PyObject* pColorRes = PyTuple_GetItem(args, 1);
-	if (!pColorRes)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "color_resolution arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pColorRes))
-	{
-		PyErr_SetString(PyExc_TypeError, "color_resolution arg must have type int");
-		return NULL;
-	}
-	k4a_color_resolution_t colorRes = (k4a_color_resolution_t)PyLong_AsLong(pColorRes);
-
-	// depth_mode
-	PyObject* pDepthMd = PyTuple_GetItem(args, 2);
-	if (!pDepthMd)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "depth_mode arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pDepthMd))
-	{
-		PyErr_SetString(PyExc_TypeError, "depth_mode arg must have type int");
-		return NULL;
-	}
-	k4a_depth_mode_t depthMd = (k4a_depth_mode_t)PyLong_AsLong(pDepthMd);
-
-	// camera_fps
-	PyObject* pFps = PyTuple_GetItem(args, 3);
-	if (!pFps)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "camera_fps arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pFps))
-	{
-		PyErr_SetString(PyExc_TypeError, "camera_fps arg must have type int");
-		return NULL;
-	}
-	k4a_fps_t fps = (k4a_fps_t)PyLong_AsLong(pFps);
-
-	// synchronized_images_only
-	PyObject* pSyncImgF = PyTuple_GetItem(args, 4);
-	if (!pSyncImgF)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "synchronized_images_only arg was invalid");
-		return NULL;
-	}
-	bool syncImgF = PyObject_IsTrue(pSyncImgF);
-
-	// depth_delay_off_color_usec
-	PyObject* pDepthDelay = PyTuple_GetItem(args, 5);
-	if (!pDepthDelay)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "depth_delay_off_color_usec arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pDepthDelay))
-	{
-		PyErr_SetString(PyExc_TypeError, "depth_delay_off_color_usec arg must have type int");
-		return NULL;
-	}
-	int32_t depthDelay = (int32_t)PyLong_AsLong(pDepthDelay);
-
-	// wired_sync_mode
-	PyObject* pWiredSyncMd = PyTuple_GetItem(args, 6);
-	if (!pWiredSyncMd)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "wired_sync_mode arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pWiredSyncMd))
-	{
-		PyErr_SetString(PyExc_TypeError, "wired_sync_mode arg must have type int");
-		return NULL;
-	}
-	k4a_wired_sync_mode_t wiredSyncMd = (k4a_wired_sync_mode_t)PyLong_AsLong(pWiredSyncMd);
-
-	// subordinate_delay_off_master_usec
-	PyObject* pSubDelay = PyTuple_GetItem(args, 7);
-	if (!pSubDelay)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "subordinate_delay_off_master_usec arg was invalid");
-		return NULL;
-	}
-	if (!PyLong_Check(pSubDelay))
-	{
-		PyErr_SetString(PyExc_TypeError, "subordinate_delay_off_master_usec arg must have type int");
-		return NULL;
-	}
-	uint32_t subDelay = (uint32_t)PyLong_AsLong(pSubDelay);
-
-	// disable_streaming_indicator
-	PyObject* pStreamIndF = PyTuple_GetItem(args, 8);
-	if (!pStreamIndF)
-	{
-		PyErr_SetString(PyExc_RuntimeError, "disable_streaming_indicator arg was invalid");
-		return NULL;
-	}
-	bool streamIndF = PyObject_IsTrue(pStreamIndF);
-
-	k4a_device_configuration_t config =
-	{
-		colorFmt,
-		colorRes,
-		depthMd,
-		fps,
-		syncImgF,
-		depthDelay,
-		wiredSyncMd,
-		subDelay,
-		streamIndF
-	};
-
-	if (K4A_SUCCEEDED(k4a_device_start_cameras(((DeviceObject*)self)->device, &config)))
-		Py_RETURN_TRUE;
-
-	Py_RETURN_FALSE;
+	Py_RETURN_NONE;
 }
 
 PyObject* DeviceObjectStopCameras(PyObject* self, PyObject* args)
 {
-	Py_RETURN_NOTIMPLEMENTED;
+	CHECK_ARGNUM(args, 0);
+
+	k4a_device_stop_cameras(m_device);
+	Py_RETURN_NONE;
 }

@@ -19,6 +19,7 @@ def main():
 
     capture = device.get_capture()
     image = capture.get_color_image()
+
     print(image.get_height_pixels())
     print(image.get_width_pixels())
 

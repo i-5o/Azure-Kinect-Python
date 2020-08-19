@@ -23,11 +23,13 @@ link_directories("${PY_ENV_PATH}/libs/")
 add_library(
 	_PyKinect SHARED
 	"src/module.c"
+	"src/util.c"
 	"src/device.c"
 	"src/capture.c"
 	"src/image.c"
 	"src/device_config.c"
 
+	"include/PyKinect/util.h"
 	"include/PyKinect/device.h"
 	"include/PyKinect/capture.h"
 	"include/PyKinect/image.h"
