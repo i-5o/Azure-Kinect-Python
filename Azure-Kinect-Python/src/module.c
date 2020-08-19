@@ -48,11 +48,11 @@ PyMODINIT_FUNC PyInit__PyKinect(void)
 
 	Py_INCREF(&DeviceConfigObjectType);
 	if (PyModule_AddObject(pModule, "DeviceConfig", (PyObject*)&DeviceConfigObjectType) < 0)
-		goto DeviceConfigObjectTypeError;
+		goto DeviceConfigObjectError;
 
 	return pModule;
 
-DeviceConfigObjectTypeError:
+DeviceConfigObjectError:
 	Py_DECREF(&DeviceConfigObjectType);
 
 ImageObjectError:

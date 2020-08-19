@@ -40,7 +40,12 @@ int CaptureObjectInit(PyObject* self, PyObject* args, PyObject* kwds)
 
 void CaptureObjectDealloc(PyObject* self)
 {
+	PyTypeObject* tp = Py_TYPE(self);
+
 	k4a_capture_release(((CaptureObject*)self)->capture);
+
+	tp->tp_free(self);
+	Py_DECREF(tp);
 }
 
 /*

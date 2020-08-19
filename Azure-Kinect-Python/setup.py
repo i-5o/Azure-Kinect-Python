@@ -19,7 +19,6 @@ _PyKinect = Extension(
     ],
     libraries=[
         "python38",
-        "_PyKinect",
         "k4a"
     ],
     language="c"

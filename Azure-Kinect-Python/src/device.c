@@ -57,7 +57,12 @@ int DeviceObjectInit(PyObject* self, PyObject* args, PyObject* kwds)
 
 void DeviceObjectDealloc(PyObject* self)
 {
+	PyTypeObject* tp = Py_TYPE(self);
+
 	k4a_device_close(((DeviceObject*)self)->device);
+
+	tp->tp_free(self);
+	Py_DECREF(tp);
 }
 
 /*

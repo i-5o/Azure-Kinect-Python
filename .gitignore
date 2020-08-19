@@ -3,3 +3,6 @@
 
 # CMake build
 out/
+
+# external libraries
+vendor/

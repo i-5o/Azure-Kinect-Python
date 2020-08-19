@@ -101,7 +101,12 @@ int ImageObjectInit(PyObject* self, PyObject* args, PyObject* kwds)
 
 void ImageObjectDealloc(PyObject* self)
 {
+	PyTypeObject* tp = Py_TYPE(self);
+	
 	k4a_image_release(((ImageObject*)self)->image);
+	
+	tp->tp_free(self);
+	Py_DECREF(tp);
 }
 
 /*

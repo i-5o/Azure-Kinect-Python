@@ -30,19 +30,34 @@ void      DeviceConfigObjectDealloc(PyObject* self);
  */
 
 PyObject* DeviceConfigObjectSetColorFormat(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetColorFormat(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetColorResolution(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetColorResolution(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetDepthMode(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDepthMode(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetCameraFps(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetCameraFps(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetSynchronizedImagesOnly(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetSynchronizedImagesOnly(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetDepthDelayOffColorUsec(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDepthDelayOffColorUsec(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetWritedSyncMode(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetWritedSyncMode(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetSubordinateDelayOffMaster(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetSubordinateDelayOffMaster(PyObject* self, PyObject* args);
 PyObject* DeviceConfigObjectSetDisableStreamingIndicator(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDisableStreamingIndicator(PyObject* self, PyObject* args);
 
 static PyMethodDef DeviceConfigObjectMethods[] = {
     {
         "set_color_format",
         DeviceConfigObjectSetColorFormat,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_color_format",
+        DeviceConfigObjectGetColorFormat,
         METH_VARARGS,
         NULL
     },
@@ -53,8 +68,20 @@ static PyMethodDef DeviceConfigObjectMethods[] = {
         NULL
     },
     {
+        "get_color_resolution",
+        DeviceConfigObjectGetColorResolution,
+        METH_VARARGS,
+        NULL
+    },
+    {
         "set_depth_mode",
         DeviceConfigObjectSetDepthMode,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_depth_mode",
+        DeviceConfigObjectGetDepthMode,
         METH_VARARGS,
         NULL
     },
@@ -65,8 +92,20 @@ static PyMethodDef DeviceConfigObjectMethods[] = {
         NULL
     },
     {
+        "get_camera_fps",
+        DeviceConfigObjectGetCameraFps,
+        METH_VARARGS,
+        NULL
+    },
+    {
         "set_synchronized_images_only",
         DeviceConfigObjectSetSynchronizedImagesOnly,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_synchronized_images_only",
+        DeviceConfigObjectGetSynchronizedImagesOnly,
         METH_VARARGS,
         NULL
     },
@@ -77,8 +116,20 @@ static PyMethodDef DeviceConfigObjectMethods[] = {
         NULL
     },
     {
+        "get_depth_delay_off_color_usec",
+        DeviceConfigObjectGetDepthDelayOffColorUsec,
+        METH_VARARGS,
+        NULL
+    },
+    {
         "set_wired_sync_mode",
         DeviceConfigObjectSetWritedSyncMode,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_wired_sync_mode",
+        DeviceConfigObjectGetWritedSyncMode,
         METH_VARARGS,
         NULL
     },
@@ -89,8 +140,20 @@ static PyMethodDef DeviceConfigObjectMethods[] = {
         NULL
     },
     {
+        "get_subordinate_delay_off_master_usec",
+        DeviceConfigObjectGetSubordinateDelayOffMaster,
+        METH_VARARGS,
+        NULL
+    },
+    {
         "set_disable_streaming_indicator",
         DeviceConfigObjectSetDisableStreamingIndicator,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_disable_streaming_indicator",
+        DeviceConfigObjectGetDisableStreamingIndicator,
         METH_VARARGS,
         NULL
     },
