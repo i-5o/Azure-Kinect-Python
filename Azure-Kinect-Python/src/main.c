@@ -65,7 +65,7 @@ int main()
 
     printf("Image width: %d\n", k4a_image_get_width_pixels(img));
     printf("Image height: %d\n", k4a_image_get_height_pixels(img));
-    printf("Image buffer size: %lu\n", k4a_image_get_size(img));
+    printf("Image buffer size: %llu\n", k4a_image_get_size(img));
 
 	exit(0);
 

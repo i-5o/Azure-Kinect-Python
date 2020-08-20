@@ -6,6 +6,8 @@
 #include <PyKinect/image.h>
 #include <PyKinect/device_config.h>
 
+#include <numpy/arrayobject.h>
+
 /*
  *
  * Python Module
@@ -22,6 +24,8 @@ static struct PyModuleDef PyKinectModule =
 
 PyMODINIT_FUNC PyInit__PyKinect(void)
 {
+	import_array();
+
 	PyObject* pModule;
 	if (PyType_Ready(&DeviceObjectType) < 0)
 		return NULL;

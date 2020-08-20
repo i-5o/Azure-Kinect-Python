@@ -1,12 +1,87 @@
 #include <PyKinect/image.h>
+#include <PyKinect/util.h>
+#include <numpy/arrayobject.h>
 
-
+#define pSelf ((ImageObject*)self)
+#define m_image pSelf->image
 
 /*
  *
  * Helper Functions
  *
  */
+
+static inline PyObject* NumpyColorMJPG(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_MJPG numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyColorNV12(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_NV12 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyColorYUY2(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_YUY2 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyColorBGRA32(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_BGRA32 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyDEPTH16(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_DEPTH16 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyIR16(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_IR16 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyCUSTOM8(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM8 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyCUSTOM16(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM16 numpy serialization is not implemented");
+	return NULL;
+}
+
+static inline PyObject* NumpyCUSTOM(PyObject* self, PyObject* args)
+{
+	CHECK_ARGNUM(args, 0);
+
+	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM numpy serialization is not implemented");
+	return NULL;
+}
 
 /*
  *
@@ -117,17 +192,53 @@ void ImageObjectDealloc(PyObject* self)
 
 PyObject* ImageObjectGetHeightPixels(PyObject* self, PyObject* args)
 {
-	int height = k4a_image_get_height_pixels(((ImageObject*)self)->image);
+	int height = k4a_image_get_height_pixels(m_image);
 	return PyLong_FromLong((long)height);
 }
 
 PyObject* ImageObjectGetWidthPixels(PyObject* self, PyObject* args)
 {
-	int width = k4a_image_get_width_pixels(((ImageObject*)self)->image);
+	int width = k4a_image_get_width_pixels(m_image);
 	return PyLong_FromLong((long)width);
 }
 
 PyObject* ImageObjectToNumpy(PyObject* self, PyObject* args)
 {
-	Py_RETURN_NOTIMPLEMENTED;
+	if (!PyArray_API)
+		import_array();
+
+	k4a_image_format_t fmt = k4a_image_get_format(m_image);
+	switch (fmt)
+	{
+	case K4A_IMAGE_FORMAT_COLOR_MJPG:
+		return NumpyColorMJPG(self, args);
+
+	case K4A_IMAGE_FORMAT_COLOR_NV12:
+		return NumpyColorNV12(self, args);
+
+	case K4A_IMAGE_FORMAT_COLOR_YUY2:
+		return NumpyColorYUY2(self, args);
+
+	case K4A_IMAGE_FORMAT_COLOR_BGRA32:
+		return NumpyColorBGRA32(self, args);
+
+	case K4A_IMAGE_FORMAT_DEPTH16:
+		return NumpyDEPTH16(self, args);
+
+	case K4A_IMAGE_FORMAT_IR16:
+		return NumpyIR16(self, args);
+
+	case K4A_IMAGE_FORMAT_CUSTOM8:
+		return NumpyCUSTOM8(self, args);
+
+	case K4A_IMAGE_FORMAT_CUSTOM16:
+		return NumpyCUSTOM16(self, args);
+
+	case K4A_IMAGE_FORMAT_CUSTOM:
+		return NumpyCUSTOM(self, args);
+
+	default:
+		PyErr_SetString(PyExc_ValueError, "k4a_image_get_format() returned an unrecognized k4a_image_format_t");
+		return NULL;
+	}
 }
