@@ -1,13 +1,8 @@
 #include <PyKinect/capture.h>
 #include <PyKinect/image.h>
 
-
-
-/*
- *
- * Helper Functions
- *
- */
+#define pSelf     ((CaptureObject*)self)
+#define m_capture pSelf->capture
 
 /*
  *
@@ -58,12 +53,34 @@ PyObject* CaptureObjectGetColorImage(PyObject* self, PyObject* args)
 {
 	PyObject* pImage = PyObject_New(ImageObject, &ImageObjectType);
 	if (!pImage)
-	{
-		PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for Image object");
 		return NULL;
-	}
+
 	Py_DECREF(PyObject_Dir(pImage));
 
-	((ImageObject*)pImage)->image = k4a_capture_get_color_image(((CaptureObject*)self)->capture);
+	((ImageObject*)pImage)->image = k4a_capture_get_color_image(m_capture);
+	return pImage;
+}
+
+PyObject* CaptureObjectGetDepthImage(PyObject* self, PyObject* args)
+{
+	PyObject* pImage = PyObject_New(ImageObject, &ImageObjectType);
+	if (!pImage)
+		return NULL;
+
+	Py_DECREF(PyObject_Dir(pImage));
+
+	((ImageObject*)pImage)->image = k4a_capture_get_depth_image(m_capture);
+	return pImage;
+}
+
+PyObject* CaptureObjectGetIRImage(PyObject* self, PyObject* args)
+{
+	PyObject* pImage = PyObject_New(ImageObject, &ImageObjectType);
+	if (!pImage)
+		return NULL;
+
+	Py_DECREF(PyObject_Dir(pImage));
+
+	((ImageObject*)pImage)->image = k4a_capture_get_ir_image(m_capture);
 	return pImage;
 }

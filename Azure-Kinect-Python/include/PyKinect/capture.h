@@ -19,9 +19,9 @@ CaptureObject;
  *
  */
 
-PyObject* CaptureObjectNew(PyTypeObject* type, PyObject* args, PyObject* kwds);
-int       CaptureObjectInit(PyObject* self, PyObject* args, PyObject* kwds);
-void      CaptureObjectDealloc(PyObject* self);
+PyObject* CaptureObjectNew      (PyTypeObject* type, PyObject* args, PyObject* kwds);
+int       CaptureObjectInit     (PyObject* self, PyObject* args, PyObject* kwds);
+void      CaptureObjectDealloc  (PyObject* self);
 
 /*
  *
@@ -29,12 +29,26 @@ void      CaptureObjectDealloc(PyObject* self);
  *
  */
 
-PyObject* CaptureObjectGetColorImage(PyObject* self, PyObject* args);
+PyObject* CaptureObjectGetColorImage  (PyObject* self, PyObject* args);
+PyObject* CaptureObjectGetDepthImage  (PyObject* self, PyObject* args);
+PyObject* CaptureObjectGetIRImage     (PyObject* self, PyObject* args);
 
 static PyMethodDef CaptureObjectMethods[] = {
     {
         "get_color_image",
         CaptureObjectGetColorImage,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_depth_image",
+        CaptureObjectGetDepthImage,
+        METH_VARARGS,
+        NULL
+    },
+    {
+        "get_ir_image",
+        CaptureObjectGetIRImage,
         METH_VARARGS,
         NULL
     },

@@ -1,11 +1,12 @@
 from .Enums import *
+import numpy as np
 
 
 class Image:
     def __init__(self, *args, **kwargs):
         pass
 
-    def to_numpy(self, *args):
+    def to_numpy(self, *args) -> np.ndarray:
         pass
 
     def get_width_pixels(self, *args) -> int:
@@ -22,6 +23,12 @@ class Capture:
     def get_color_image(self, *args) -> Image:
         pass
 
+    def get_depth_image(self, *args) -> Image:
+        pass
+
+    def get_ir_image(self, *args) -> Image:
+        pass
+
 
 class Device:
     def __init__(self, *args, **kwargs):
@@ -33,7 +40,7 @@ class Device:
     def start_cameras(self, *args) -> bool:
         pass
 
-    def stop_cameras(self, *args):
+    def stop_cameras(self, *args) -> None:
         pass
 
 

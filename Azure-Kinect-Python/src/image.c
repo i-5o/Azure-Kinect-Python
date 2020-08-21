@@ -44,7 +44,7 @@ static inline PyObject* NumpyColorBGRA32(PyObject* self, PyObject* args)
 
 	uint8_t* pBuf = k4a_image_get_buffer(m_image);
 
-	npy_intp dims[] = { width, height, 4 };
+	npy_intp dims[] = { height, width, 4 };
 	PyObject* npPyBuf = PyArray_SimpleNewFromData(3, dims, NPY_UINT8, pBuf);
 	if (!npPyBuf)
 		return NULL;
@@ -59,16 +59,40 @@ static inline PyObject* NumpyDEPTH16(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_DEPTH16 numpy serialization is not implemented");
-	return NULL;
+	int width = k4a_image_get_width_pixels(m_image);
+	int height = k4a_image_get_height_pixels(m_image);
+
+	uint8_t* pBuf = k4a_image_get_buffer(m_image);
+
+	npy_intp dims[] = { height, width };
+	PyObject* npPyBuf = PyArray_SimpleNewFromData(2, dims, NPY_UINT16, pBuf);
+	if (!npPyBuf)
+		return NULL;
+
+	Py_INCREF(self);
+	((PyArrayObject*)npPyBuf)->base = self;
+
+	return npPyBuf;
 }
 
 static inline PyObject* NumpyIR16(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_IR16 numpy serialization is not implemented");
-	return NULL;
+	int width = k4a_image_get_width_pixels(m_image);
+	int height = k4a_image_get_height_pixels(m_image);
+
+	uint8_t* pBuf = k4a_image_get_buffer(m_image);
+
+	npy_intp dims[] = { height, width };
+	PyObject* npPyBuf = PyArray_SimpleNewFromData(2, dims, NPY_UINT16, pBuf);
+	if (!npPyBuf)
+		return NULL;
+
+	Py_INCREF(self);
+	((PyArrayObject*)npPyBuf)->base = self;
+
+	return npPyBuf;
 }
 
 static inline PyObject* NumpyCUSTOM8(PyObject* self, PyObject* args)

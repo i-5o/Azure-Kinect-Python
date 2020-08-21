@@ -5,7 +5,7 @@
 
 #define CHECK_ARGNUM(args, n)                                         \
 	Py_ssize_t argNum = PyTuple_Size(args);                           \
-	if (argNum != 1)                                                  \
+	if (argNum != n)                                                  \
 	{                                                                 \
 		char buf[64];                                                 \
 		sprintf(buf, "Expected "#n" argument(s), got %llu", argNum);  \
