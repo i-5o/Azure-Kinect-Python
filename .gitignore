@@ -4,5 +4,5 @@
 # CMake build
 out/
 
-# external libraries
-vendor/
+# PyCharm files
+Examples/.idea/

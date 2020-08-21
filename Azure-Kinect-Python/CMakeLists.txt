@@ -54,11 +54,3 @@ target_link_libraries(_PyKinect PUBLIC "${PY_ENV_PATH}/libs/python38.lib")
 
 configure_file("setup.py" "setup.py")
 file(COPY "PyKinect" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
-
-add_executable(
-	kinectTest
-	"src/main.c"
-)
-
-find_package(k4a CONFIG REQUIRED)
-target_link_libraries(kinectTest PRIVATE k4a::k4a)

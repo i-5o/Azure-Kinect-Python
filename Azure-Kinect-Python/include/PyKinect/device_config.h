@@ -19,9 +19,10 @@ DeviceConfigObject;
  *
  */
 
-PyObject* DeviceConfigObjectNew(PyTypeObject* type, PyObject* args, PyObject* kwds);
-int       DeviceConfigObjectInit(PyObject* self, PyObject* args, PyObject* kwds);
-void      DeviceConfigObjectDealloc(PyObject* self);
+PyObject* DeviceConfigObjectNew     (PyTypeObject* type, PyObject* args, PyObject* kwds);
+int       DeviceConfigObjectInit    (PyObject* self, PyObject* args, PyObject* kwds);
+void      DeviceConfigObjectDealloc (PyObject* self);
+PyObject* DeviceConfigObjectRepr    (PyObject* self);
 
 /*
  *
@@ -29,35 +30,35 @@ void      DeviceConfigObjectDealloc(PyObject* self);
  *
  */
 
-PyObject* DeviceConfigObjectSetColorFormat(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetColorFormat(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetColorResolution(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetColorResolution(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetDepthMode(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetDepthMode(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetCameraFps(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetCameraFps(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetSynchronizedImagesOnly(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetSynchronizedImagesOnly(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetDepthDelayOffColorUsec(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetDepthDelayOffColorUsec(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetWritedSyncMode(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetWritedSyncMode(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetSubordinateDelayOffMaster(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetSubordinateDelayOffMaster(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectSetDisableStreamingIndicator(PyObject* self, PyObject* args);
-PyObject* DeviceConfigObjectGetDisableStreamingIndicator(PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetImageFormat               (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetImageFormat               (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetColorResolution           (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetColorResolution           (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetDepthMode                 (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDepthMode                 (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetCameraFps                 (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetCameraFps                 (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetSynchronizedImagesOnly    (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetSynchronizedImagesOnly    (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetDepthDelayOffColorUsec    (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDepthDelayOffColorUsec    (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetWritedSyncMode            (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetWritedSyncMode            (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetSubordinateDelayOffMaster (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetSubordinateDelayOffMaster (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectSetDisableStreamingIndicator (PyObject* self, PyObject* args);
+PyObject* DeviceConfigObjectGetDisableStreamingIndicator (PyObject* self, PyObject* args);
 
 static PyMethodDef DeviceConfigObjectMethods[] = {
     {
-        "set_color_format",
-        DeviceConfigObjectSetColorFormat,
+        "set_image_format",
+        DeviceConfigObjectSetImageFormat,
         METH_VARARGS,
         NULL
     },
     {
-        "get_color_format",
-        DeviceConfigObjectGetColorFormat,
+        "get_image_format",
+        DeviceConfigObjectGetImageFormat,
         METH_VARARGS,
         NULL
     },
@@ -181,7 +182,8 @@ static PyTypeObject DeviceConfigObjectType = {
     .tp_flags = Py_TPFLAGS_DEFAULT,
     .tp_methods = DeviceConfigObjectMethods,
     .tp_new = DeviceConfigObjectNew,
-    .tp_init = (initproc)DeviceConfigObjectInit
+    .tp_init = (initproc)DeviceConfigObjectInit,
+    .tp_repr = DeviceConfigObjectRepr
 };
 
 #endif

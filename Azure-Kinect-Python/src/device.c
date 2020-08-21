@@ -100,32 +100,32 @@ PyObject* DeviceObjectGetCapture(PyObject* self, PyObject* args)
 		return NULL;
 	}
 
-	PyObject* pCap = PyObject_New(CaptureObject, &CaptureObjectType);
+	CaptureObject* pCap = PyObject_New(CaptureObject, &CaptureObjectType);
 	if (!pCap)
 	{
 		PyErr_SetString(PyExc_MemoryError, "Unable to create a capture object");
 		return NULL;
 	}
-	Py_DECREF(PyObject_Dir(pCap));
+	Py_DECREF(PyObject_Dir((PyObject*)pCap));
 
 	switch (k4a_device_get_capture(
-		((DeviceObject*)self)->device,
-		&((CaptureObject*)pCap)->capture,
+		m_device,
+		&pCap->capture,
 		timeout_in_ms
 	))
 	{
 	case K4A_WAIT_RESULT_SUCCEEDED:
-		return pCap;
+		return (PyObject*)pCap;
 	case K4A_WAIT_RESULT_FAILED:
-		Py_DecRef(pCap);
+		Py_DecRef((PyObject*)pCap);
 		PyErr_SetString(PyExc_SystemError, "Failed to get capture from camera");
 		return NULL;
 	case K4A_WAIT_RESULT_TIMEOUT:
-		Py_DecRef(pCap);
+		Py_DecRef((PyObject*)pCap);
 		PyErr_SetString(PyExc_SystemError, "get_capture timed out when waiting for a capture");
 		return NULL;
 	default:
-		Py_DecRef(pCap);
+		Py_DecRef((PyObject*)pCap);
 		PyErr_SetString(PyExc_SystemError, "get_capture resulted in an unknown error");
 		return NULL;
 	}
@@ -139,7 +139,7 @@ PyObject* DeviceObjectStartCameras(PyObject* self, PyObject* args)
 	if (!pPyKinectMod)
 		return NULL;
 
-	PyObject* pPyDeviceConfig = PyObject_GetAttrString(pPyKinectMod, "ImageCls");
+	PyObject* pPyDeviceConfig = PyObject_GetAttrString(pPyKinectMod, "DeviceConfig");
 	Py_DECREF(pPyKinectMod);
 	if (!pPyDeviceConfig)
 		return NULL;

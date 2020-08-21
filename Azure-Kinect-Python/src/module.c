@@ -33,6 +33,8 @@ PyMODINIT_FUNC PyInit__PyKinect(void)
 		return NULL;
 	if (PyType_Ready(&ImageObjectType) < 0)
 		return NULL;
+	if (PyType_Ready(&DeviceConfigObjectType) < 0)
+		return NULL;
 
 	pModule = PyModule_Create(&PyKinectModule);
 	if (!pModule)

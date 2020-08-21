@@ -15,7 +15,7 @@ static inline PyObject* NumpyColorMJPG(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_MJPG numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_MJPG numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -23,7 +23,7 @@ static inline PyObject* NumpyColorNV12(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_NV12 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_NV12 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -31,7 +31,7 @@ static inline PyObject* NumpyColorYUY2(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_YUY2 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_YUY2 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -39,15 +39,27 @@ static inline PyObject* NumpyColorBGRA32(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_COLOR_BGRA32 numpy serialization is not implemented");
-	return NULL;
+	int width  = k4a_image_get_width_pixels  (m_image);
+	int height = k4a_image_get_height_pixels (m_image);
+
+	uint8_t* pBuf = k4a_image_get_buffer(m_image);
+
+	npy_intp dims[] = { width, height, 4 };
+	PyObject* npPyBuf = PyArray_SimpleNewFromData(3, dims, NPY_UINT8, pBuf);
+	if (!npPyBuf)
+		return NULL;
+
+	Py_INCREF(self);
+	((PyArrayObject*)npPyBuf)->base = self;
+
+	return npPyBuf;
 }
 
 static inline PyObject* NumpyDEPTH16(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_DEPTH16 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_DEPTH16 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -55,7 +67,7 @@ static inline PyObject* NumpyIR16(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_IR16 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_IR16 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -63,7 +75,7 @@ static inline PyObject* NumpyCUSTOM8(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM8 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM8 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -71,7 +83,7 @@ static inline PyObject* NumpyCUSTOM16(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM16 numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM16 numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -79,7 +91,7 @@ static inline PyObject* NumpyCUSTOM(PyObject* self, PyObject* args)
 {
 	CHECK_ARGNUM(args, 0);
 
-	PyExc_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM numpy serialization is not implemented");
+	PyErr_SetString(PyExc_NotImplementedError, "K4A_IMAGE_FORMAT_CUSTOM numpy serialization is not implemented");
 	return NULL;
 }
 
@@ -108,7 +120,7 @@ int ImageObjectInit(PyObject* self, PyObject* args, PyObject* kwds)
 	if (argNum != 4)
 	{
 		char buf[64];
-		sprintf(buf, "Expected 4 arguments, recieved %lu", argNum);
+		sprintf(buf, "Expected 4 arguments, recieved %llu", argNum);
 		PyErr_SetString(PyExc_ValueError, buf);
 		return -1;
 	}
@@ -165,7 +177,7 @@ int ImageObjectInit(PyObject* self, PyObject* args, PyObject* kwds)
 	}
 	int stride = (int)PyLong_AsLong(pStride);
 
-	if (K4A_FAILED(k4a_image_create(imgFmt, width, height, stride, ((ImageObject*)self)->image)))
+	if (K4A_FAILED(k4a_image_create(imgFmt, width, height, stride, &m_image)))
 	{
 		PyErr_SetString(PyExc_SystemError, "k4a_image_create failed");
 		return -1;
